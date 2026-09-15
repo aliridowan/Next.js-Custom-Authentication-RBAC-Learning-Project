@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  name     String
+  password String
+  role     Role    @default(USER) // Aytar mane hocce nice j enum ace oitar vitor diye role choose korbe abong jdi kicu na dea hoi tyle by default USER add hobe
+  teamId   String?
+  team     Team?   @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  // timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //index er mane hocce ayta diye search er jonno fast reasult paoya jai 
+  @@index([email])
+  @@index([role])
+  @@index([teamId])
+  //map er mane hocce ayta database a ki name a colume banabe 
+  @@map("user")
+}
+
+model Team {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+  code        String  @unique
+  members     User[]
+
+  // timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //map
+  @@map("team")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  USER
+  GUEST
+}
