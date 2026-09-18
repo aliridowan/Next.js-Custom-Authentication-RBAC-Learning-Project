@@ -22,7 +22,7 @@ const formSchema = z.object({
   password: z.string().min(6, 'Password should be at least 6 characters long').max(20, 'Password should be less than 20 characters long'),
   conform: z.string().min(6, 'Confirm password should be at least 6 characters long').max(20, 'Confirm password should be less than 20 characters long'),
 }).refine((data) => data.password === data.conform, {
-  error: "Passwords don't match",
+  message: "Passwords don't match",
   path: ["confirm"], // path of error
 });
 
@@ -40,7 +40,7 @@ type FormData = z.infer<typeof formSchema>
 
 export default function ZodForm() {
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(formSchema),
   });
 

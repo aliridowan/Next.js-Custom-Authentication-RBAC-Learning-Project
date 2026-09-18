@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
           name: userFromDb.name,
           role: userFromDb.role,
           teamId: userFromDb.teamId,
-          team: userFromDb.team,
+          // team: userFromDb.team,
           // token, the user doeesn't need to see the token in the response 
         },
       }
